@@ -1,0 +1,13 @@
+<div id="footer" class="box">
+    <div>
+        <p>
+            <a href="about.php">About</a>
+            <a href="help.php">Help</a>
+            <a href="login.php">Login</a><br>
+
+            <% if (config.ORG) { %>
+            &copy; 1993-<%= new Date().getFullYear() %> <a style="text-decoration:none;" href="<%= config.ORG_URL %>"><%= config.ORG_NAME %></a>
+            <% } %>
+        </p>
+    </div>
+</div>

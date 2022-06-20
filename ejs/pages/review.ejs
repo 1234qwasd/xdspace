@@ -1,0 +1,30 @@
+<%-
+   include('../templates/headers', {
+      title: 'Review comments',
+      jquery: true,
+      css: `
+        .tableLeft { width: 13% }
+        .tableRight { width: 90% }
+      `
+   });
+%>
+<body>
+    <div id="container">
+        <%- include ('../templates/nav') -%>
+        <h1>New Comments</h1>
+        <h4>These comments are waiting for your approval:</h4>
+
+        <div class="box comments">
+            <%-
+                include('../templates/comments', {
+                    comments,
+                    header: false,
+                    type: 'review',
+                    where: 'profile'
+                });
+            %>
+        </div>
+    </div>
+    <script type="text/javascript" src="index.js"></script>
+</body>
+</html>

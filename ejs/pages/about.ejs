@@ -1,0 +1,61 @@
+<%-
+   include('../templates/headers', {
+      title: 'About muSpace',
+      css: '@media only screen and (max-width:768px){#container{padding-top: 40px;}}'
+   });
+%>
+<body>
+   <%- include('../templates/nav') %>
+   <div id="container">
+      <h1>About this</h1>
+
+      <h4>What is this?</h4>
+      <p>It's a <a href="https://en.wikipedia.org/wiki/Myspace" target="blank">MySpace</a> clone (era 2003/2004)</p>
+
+      <h4>Who made this?</h4>
+      <p>muSpace was made by <%= pkg.contributors.slice(0, -1).join(', ') %> and <%= pkg.contributors[pkg.contributors.length - 1] %>.</p>
+      <p>Original website was written by <a href="https://myspace.windows93.net/?id=6">Jankenpopp</a> for <a href="http://windows93.net">Windows93.net</a>.</p>
+
+      <h4>Why is this?</h4>
+      <p>
+         Internet art,<br>
+         Archaeology,<br>
+         Nostalgia,<br>
+         Time travelling,<br>
+         Old versus new comparison,<br>
+         Teaching,<br>
+         Digital society studies,<br>
+         Design studies,<br>
+         Social network studies,<br>
+         CSS magic,<br>
+         Art freedom,<br>
+         Tech freedom,<br>
+         Creative sandbox,<br>
+         Copyright infringement,<br>
+         Fake accounting,<br>
+         Cyber hustling,<br>
+         Cyberbullying,<br>
+         Music,<br>
+         Memes,<br>
+         Making fwiends!<br>
+      </p>
+
+      <h4>What kind of business are you doing with my data?</h4>
+      <p>Absolutely nothing. We made this on our free time just for you.<br>Please accept this special gift with our compliments.</p>
+
+      <h4>How can I support this?</h4>
+      <p>
+         This service is free.<br>
+         If you want to support this, you can give us a star <a href="<%= pkg.repository.url %>">on GitLab</a>.<br>
+         If you want you can also share this over your own network.
+      </p>
+
+      <h4>Can I get the source of this?</h4>
+      <p>Yes! The source code is at <a href="<%= pkg.repository.url %>"><%= pkg.repository.url %></a>.</p>
+      <p>You are free to run your own clones and edit the muSpace source.</p>
+      <br>
+
+      <%- include('../templates/footer') %>
+   </div>
+</body>
+</html>

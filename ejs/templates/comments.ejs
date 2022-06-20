@@ -1,0 +1,91 @@
+<%
+    let canComment;
+
+    if(typeof allowPost == 'undefined')
+        allowPost = false;
+
+    if(typeof header == 'undefined')
+        header = true;
+
+    if(typeof type == 'undefined')
+        type = null;
+
+    if(type == 'profile')
+        canComment =    viewer &&
+                        (viewer.id === user.id ||
+                        user.hasFriend(viewer));
+%>
+
+
+<% if(allowPost) { %>
+    <% if(!viewer) { %>
+    <div style='margin-bottom:20px;'>
+        Please <a href='/login.php'>login</a> to leave a comment.
+    </div>
+    <% } %>
+
+    <% if(canComment) { %>
+    <div id="form">
+        <div class="boxHead"><b>Leave a comment</b></div>
+        <form action="comment.php" method="post">
+            <textarea name="comment" id="commentInput"></textarea>
+            <input type="hidden" name="user" value="<%= user.id %>">
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+            <input type="submit" value="Send">
+        </form>
+    </div>
+    <% } %>
+<% } %>
+
+<% if(header) { %>
+    <div class="boxHead"><b>Comments</b></div>
+<% } %>
+
+<table id="userWall">
+    <% // COMMENT DIV // %>
+
+    <% for(let comment of comments) { %>
+    <tr>
+        <td class="tableLeft">
+            <a href="/?id=<%= comment.author.id %>">
+                <div><b><%= comment.author.name %></b></div>
+                <img src="/u/<%= comment.author.id %>/avatar">
+            </a>
+        </td>
+
+        <td class="tableRight">
+            <div><b class="date"><%= comment.created_on.getTime() %></b></div>
+            <div><%- md.render(comment.content) %></div>
+
+            <% if(type == 'profile') {%>
+                <% if(viewer && (viewer.id === user.id || viewer.admin || comment.author.id == viewer.id)) { %>
+                    <form method="POST" action="/delete.php" class="inline">
+                        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                        <input type="hidden" name="id" value="<%= user.id %>">
+                        <input type="hidden" name="t" value="<%= comment.created_on.getTime() %>">
+                        <button type="submit">delete</button>
+                    </form>
+                <% } %>
+            <% } %>
+
+            <% if(type == 'review') { %>
+                <form method="POST" action="<%= where == 'profile' ? '/dapp.php': '/approveBlogCom.php' %>" class="inline">
+                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                    <input type="hidden" name="t" value="<%= comment.created_on.getTime() %>">
+                    <button type="submit">✅ Approve</button>
+                </form>
+
+                <form method="POST" action="<%= where == 'profile' ? '/dcom.php': '/deleteBlogComW.php' %>" class="inline">
+                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                    <input type="hidden" name="t" value="<%= comment.created_on.getTime() %>">
+                    <button type="submit">❌ Remove</button>
+                </form>
+            <% }%>
+        </td>
+    </tr>
+    <% } %>
+</table>
+
+<% if(type == 'profile' || type == 'blog') { %>
+<div style="font-size:small;text-align:right;">(<%= profile.comments.length %>/<%= config.MAX_PROFILE_COMMENTS %>)</div>
+<% } %>

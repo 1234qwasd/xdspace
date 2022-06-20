@@ -1,0 +1,36 @@
+<%-
+   include('../templates/headers', {
+      title: 'Edit MP3'
+   });
+%>
+<body>
+    <%- include('../templates/nav') %>
+    <div id="uploadInfo" style="display: none;margin-top: 20px;">
+        <i>Uploading your file, please Wait...</i>
+    </div>
+    <div id="container" style="margin-top: 20px;">
+        <a href="index.php?id=<%= viewer.id %>">&lt; Go Back</a>
+        <h3>Edit profile MP3</h3>
+        <% if(viewer.profile.song.enabled) { %>
+        <div>This is your current mp3:</div>
+        <%-
+            include('../templates/player', {
+                songName: viewer.profile.song.name,
+                songUserID: viewer.id,
+                songTimestamp: -1
+            })
+        %>
+        <form enctype="multipart/form-data" action="/upmp3.php?_csrf=<%= csrfToken %>" method="post" style="text-align: left;">
+            <input type="submit" name="delete" value="Delete Mp3">
+        </form>
+        <% } %>
+        <div>Upload a new Mp3?</div>
+        <br>
+        <form enctype="multipart/form-data" action="/upmp3.php?_csrf=<%= csrfToken %>" method="post" style="text-align: left;">
+          <!-- Le nom de l'élément input détermine le nom dans le tableau $_FILES -->
+          <input name="userfile" type="file">
+          <input onclick="document.getElementById('container').style.display = 'none'; document.getElementById('uploadInfo').style.display = 'block';" type="submit" value="Send">
+        </form>
+    </div>
+</body>
+</html>

@@ -1,0 +1,112 @@
+<%-
+   include('../templates/headers', {
+      title: 'Music',
+      css: `
+#pm {
+    display:none;
+}
+
+.pb {
+    padding: 10px;
+    margin: 10px 10px 10px 0px;
+    font-size: small;
+    float: left;
+    position: relative;
+    top: 4px;
+    left: 6px;
+    color: black;
+    font-weight: bold;
+    cursor: pointer;
+}
+`,
+    jquery: true
+   });
+%>
+<body style="padding: 20px; padding-top: 70px">
+    <div id="container">
+        <%- include('../templates/nav') %>
+        <div class="allfwieds">
+            <h1>MuSpace Music</h1>
+            <h3>Total tracks: <span id="totalTracks"></span></h3>
+            <div id="console">Loading playlist, please wait :)</div>
+            <div id="pm">
+                <div class="player box"><div class="songName"><b>User:</b> <span class="songTitle">Ready! Click START :)</span></div>
+                <audio controls autoplay src="" id="player" onended="nextTrack();"></audio>
+                <button id="nb" class="pb" onClick="nextTrack();">START</button>
+                <a id="downloader" href="/u/1/audio" download="test.mp3">
+                    <button class="pb">DOWNLOAD</button>
+                </a>
+                <span style="font-size: small;float: right;"> random <input type="checkbox" id="random" name="" checked></span>
+            </div>
+
+            <div id="musicPlaylist">
+                <% for(let i = 0; i < users.length; i++) { %>
+                <div class="playlistElem">
+                    <span id="song<%= users[i].id %>" class="list"><%= users[i].id.toString().padStart(users.length.toString().length, '0') %> – <span class="usrName"><%= users[i].name %></span></span>
+                </div>
+                <% } %>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const tracks = <%= JSON.stringify(users.map(o => o.id)) %>;
+        var currentTrack=1;
+
+        $('#totalTracks').text(tracks.length);
+
+        $('#pm').css('display','initial');
+        $('#console').css('display','none');
+
+        $( ".list" ).each(function( index ) {
+            $( this ).click(function() {
+              tId=parseInt(this.id.substring(4));
+              currentTrack = tId;
+              usrName =  $(this).find( ".usrName" ).text();
+              $('.songTitle').text(usrName);
+              $('.songTitle').append(' <span style="float:right;">[<a href="index.php?id='+currentTrack+'">visit profile</a>]</span>');
+              $('#player').attr('src', 'u/'+tId+'/audio.mp3');
+              $('.list').css('color', 'black');
+              $('#song'+currentTrack).css('color','blue')
+            });
+        });
+
+        function updateDownload(){
+            $.getJSON( "api.php?id="+currentTrack, function( user ) {
+                document.getElementById('downloader').download = user.mp3.name;
+                document.getElementById('downloader').href = "u/"+currentTrack+"/audio.mp3";
+            });
+        }
+
+        function nextTrack(){
+            $("button#nb").html("NEXT");
+            if ($('input#random').is(":checked")) {
+                randomTrack(); return;
+            }
+            currentTrack = tracks[tracks.indexOf(currentTrack)+1];
+            if (currentTrack==undefined) {currentTrack=tracks[0]};
+            $('#player').attr('src', 'u/'+currentTrack+'/audio.mp3');
+            usrName = $('#song'+currentTrack).find( ".usrName" ).text();
+            $('.songTitle').text(usrName);
+            $('.songTitle').append(' <span style="float:right;">[<a href="index.php?id='+currentTrack+'">visit profile</a>]</span>');
+            document.getElementById('player').play();
+            $('.list').css('color', 'black');
+            $('#song'+currentTrack).css('color','blue');
+            updateDownload();
+        }
+
+        function randomTrack(){
+            currentTrack = tracks[parseInt( Math.random()* tracks.length)];
+            $('#player').attr('src', 'u/'+currentTrack+'/audio.mp3');
+            usrName = $('#song'+currentTrack).find( ".usrName" ).text();
+            $('.songTitle').text(usrName);
+            $('.songTitle').append(' <span style="float:right;">[<a href="index.php?id='+currentTrack+'">visit profile</a>]</span>');
+            document.getElementById('player').play();
+            $('.list').css('color', 'black');
+            $('#song'+currentTrack).css('color','blue');
+            updateDownload();
+        }
+    </script>
+    <%- include('../templates/footer') %>
+</body>
+</html>

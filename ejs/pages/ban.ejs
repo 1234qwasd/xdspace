@@ -1,0 +1,74 @@
+<%-
+   include('../templates/headers', {
+      title: 'Switch user',
+      jquery: true
+   });
+%>
+<body>
+   <div id="container">
+     <%- include ('../templates/nav') -%>
+      <% if(user.id === viewer.id || user.admin) { %>
+      <div class="box admin confirm">
+         <div class="boxHead">
+            <img src="/img/admin/warning.png">
+            <b>Error</b>
+         </div>
+
+         <div class="content">
+            <img src="/img/admin/warning_large.png" style="float: left">
+            <span>This user cannot be banned.</span>
+
+           <div class="buttons">
+               <button onclick="history.back()">Go back</button>
+            </div>
+         </div>
+      </div>
+      <% } else { %>
+         <% if(!user.banned) { %>
+         <form class="box admin confirm ban-confirm" action="/manage/ban" method="POST">
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+            <input type="hidden" name="user" value="<%= user.id %>">
+            <input type="hidden" name="state" value="1">
+
+            <div class="boxHead">
+               <img src="/img/admin/warning.png">
+               <b>Ban <%= user.name %>?</b>
+            </div>
+
+            <div class="content">
+               <img src="/img/admin/warning_large.png" style="float: left">
+               <span>Please enter a reason for the ban below, then press Ban to confirm.</span>
+               
+               <textarea name="reason" placeholder="Enter a reason here..."></textarea>
+               <div class="buttons">
+                  <button onclick="history.back()">Cancel</button>
+                  <input type="submit" value="Ban">
+               </div>
+            </div>
+         </form>
+         <% } else { %>
+            <form class="box admin confirm ban-confirm" action="/manage/ban" method="POST">
+               <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+               <input type="hidden" name="user" value="<%= user.id %>">
+               <input type="hidden" name="state" value="0">
+
+               <div class="boxHead">
+                  <img src="/img/admin/warning.png">
+                  <b>Unban <%= user.name %>?</b>
+               </div>
+
+               <div class="content">
+                  <img src="/img/admin/warning_large.png" style="float: left">
+                  <span>Are you sure you want to unban this user? The ban reason is: "<%= user.admin_data.ban_reason %>".</span>
+                  
+                  <div class="buttons">
+                     <button onclick="history.back()">Cancel</button>
+                     <input type="submit" value="Unban">
+                  </div>
+               </div>
+         </form>
+         <% } %>
+      <% } %>
+   </div>
+</body>
+</html>

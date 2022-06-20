@@ -1,0 +1,38 @@
+<%-
+   include('../templates/headers', {
+      title: 'Login',
+      css: `
+         @media only screen and (max-width:768px) {
+            #container {
+               padding-top: 20px
+            }
+         }`
+   });
+%>
+<body>
+   <div id="container">
+      <%- include('../templates/nav') %> 
+      <div style="padding: 20px">
+         <div class="container form-signin">
+         </div> <!-- /container -->
+
+         <h2>Enter Mail and Password</h2> 
+         <div class="container">
+            <form role="form" action="/login.php" method="post" style="text-align: left">
+               <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+               <% if(typeof error != 'undefined') { %>
+               <h4><%= error %></h4>
+               <% } %>
+               <b>Mail:</b><br>
+               <input type="text" name="username" placeholder="" required="" autofocus=""><br>
+
+               <b>Password:</b><br>
+               <input type="password" name="password" placeholder="" required=""><br><br>
+
+               <button type="submit" name="login">Login</button>
+            </form>
+         </div> 
+      </div>
+   </div>
+</body>
+</html>

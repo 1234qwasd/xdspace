@@ -1,0 +1,39 @@
+<%-
+   include('../templates/headers', {
+      title: 'Requests'
+   });
+%>
+<body>
+    <div id="container">
+        <%- include ('../templates/nav') -%>
+        <div class="allfwieds">
+        <a href="/?id=<%= viewer.id %>">&lt; Go Back</a>
+        <h2>Pending fwiend requests</h2>
+        <% for(const user of requests) { %>
+            <div class="allfwiedsItem">
+                <a href="/?id=<%= user.id %>">
+                    <b><%= user.name %></b>
+                    <div>
+                        <img src="/u/<%= user.id %>/avatar" style="width:calc( 100% - 20px ); max-height:300px;">
+                    </div>
+                </a>
+                <div style="margin-top: 10px">
+                    <form method="POST" action="/accept.php" style="text-align: center; margin-bottom: 5px">
+                        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                        <input type="hidden" name="user" value="<%= user.id %>">
+                        <button type="submit">✅ Accept</button>
+                    </form>
+
+                    <form method="POST" action="/decline.php" style="text-align: center; margin: 0">
+                        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                        <input type="hidden" name="user" value="<%= user.id %>">
+                        <button type="submit">❌ Decline</button>
+                    </form>
+                </div>
+            </div>
+        <% } %>
+        </div>
+    </div>
+    <script type="text/javascript" src="index.js"></script>
+</body>
+</html>

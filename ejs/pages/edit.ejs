@@ -1,0 +1,118 @@
+<%-
+    include('../templates/headers', {
+        title: 'Edit your profile',
+        css: `
+            body {
+                background: #EEE;
+                padding: 20px;
+                padding-top: 70px;
+            }
+
+            textarea{
+                width: 100%;
+                min-height: 200px;
+            }   
+
+            input {
+                width: calc( 100% - 3px );
+            }
+
+            #footer{
+                width: 100%;
+                bottom: 0px;
+                display: grid;
+                text-align: center;
+            }`,
+        jquery: true
+    });
+%>
+<body>
+    <div id="container">
+        <%- include('../templates/nav') %>
+        <a href="/index.php?id=<%= user.id %>">&lt; Go Back</a>
+        <h1>Edit your profile</h1>
+        <form style="text-align:left;" action="update.php?id=<%= user.id %>" method="post">
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+            <h3><%= user.name %></h3>
+
+            <b>Motto</b>
+            <span style="font-size: small">
+                (<%= config.MAX_PROFILE_CREDO_LENGTH %> characters max)
+            </span><br>
+            <input type="text" name="credo" value="<%= profile.about.motto %>"><br>
+
+            
+            <div>
+                <b>Gender</b><br>
+
+                <%-
+                    include('../templates/options', {
+                        name: 'gender',
+                        selected: profile.about.gender,
+                        values: config.GENDERS
+                    });
+                %>
+            </div>
+
+
+            <div>
+                <b>Age</b><br>
+
+                <%-
+                    include('../templates/options', {
+                        name: 'age',
+                        selected: profile.about.age,
+                        range: config.MAX_PROFILE_AGE
+                    });
+                %>
+            </div>  
+
+
+            <div>
+                <b>Country</b><br>
+
+                <%-
+                    include('../templates/options', {
+                        name: 'country',
+                        selected: profile.about.country,
+                        values: config.COUNTRIES
+                    });
+                %>
+            </div>
+
+
+            <b>About Me</b>
+            <span style="font-size: small">
+                (<%= config.MAX_PROFILE_BIO_LENGTH %> characters max, Markdown Syntax. You can paste links, image url, youtube url or soundcloud song url to embed stuff)
+            </span><br>
+            <textarea name="about"><%= profile.about.bio %></textarea><br>
+
+
+            <b>Who I'd like to meet</b>
+            <span style="font-size: small">
+                (512 characters max, Markdown Syntax)
+            </span><br>
+            <textarea name="who"><%= profile.about.meet %></textarea><br>
+            
+
+            <h3>Customize</h3>
+            <b>CSS</b>
+            <span style="font-size: small">
+                (Add your own CSS rules, pure CSS only.)
+            </span>
+
+            <textarea id="cssForm" name="css"><%= profile.css %></textarea>
+            <p>
+                <span style="font-size: small">
+                    <b>New to CSS?</b> check janken's <a href="https://www.youtube.com/watch?v=QEJoDPAB8M4" target="blank">video tutorial</a>
+                </span>
+            </p><br>
+            
+            <p style="text-align: center">          
+                <input style="width: 200px; height: 30px; background: white" type="submit" value="UPDATE">
+            </p>
+        </form>
+        <%- include('../templates/footer') %>
+    </div>
+</body>
+</html>

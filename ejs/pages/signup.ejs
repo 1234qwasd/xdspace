@@ -1,0 +1,65 @@
+<%-
+   include('../templates/headers', {
+      title: 'Sign Up',
+      css: `
+         @media only screen and (max-width:768px) {
+            #container {
+               padding-top: 20px
+            }
+         }`
+   });
+%>
+<body>
+   <div id="container">
+      <%- include('../templates/nav') %>
+      <div style="padding: 20px">
+         <h2>Create your account</h2> 
+
+         <div class="container form-signin">
+         </div> <!-- /container -->
+
+         <div class="container">
+            <% if(registering && !error) { %>
+            <h4>GUD!</h4>
+            <span style="font-size: small">Please check your mailbox.</span>
+            <% } else { %>
+            <form role="form" action="/signup.php" method="post" style="text-align:left">
+               <p>
+                  If you have no idea what myspace is about, please read this first:
+                  <a href="/about.php">About</a>.<br>
+                  <b>This service is real, if you don't plan to use it, thank you for not joining us.</b>
+               </p>
+               <% if(process.env.NODE_ENV != 'production') { %>
+                <b style="color: #f00">This is a development server, data may be erased at any time.</b>
+                <% } %>
+               <% if(registering && error) { %>
+               <h4><%= error %></h4>
+               <% } %>
+               <br>
+
+               <% if(!config.SERVER_DISABLE_SIGNUPS) { %>
+               <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+               <b>User Name <span style="color:red;">*</span></b><br>
+               <input type="text" name="name" required autofocus></br>
+               <span style="font-size:small;color:red;"><b>*</b> Please choose well, because you can't change it later!<br>[Max length: 20 characters]</span><br>
+
+               <br><b>Mail:</b><br>
+               <input type="email" name="mail" required><br>
+
+               <b>Password:</b><br>
+               <input type="password" name="password" required><br><br>
+
+               <button type="submit" name="signup">Sign Up</button>
+               <% } else { %>
+                  <p style="color: red">Sorry, server signups are currently disabled.</p>
+                  <% if(config.SERVER_DISABLE_SIGNUPS_MESSAGE) { %>
+                  <i style="display: block; margin: 6px">"<%= config.SERVER_DISABLE_SIGNUPS_MESSAGE %>"</i>
+                  <% } %>
+               <% } %>
+            </form>
+            <% } %>
+         </div>
+      </div>
+   </div>
+</body>
+</html>

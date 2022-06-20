@@ -1,0 +1,195 @@
+.box.admin {
+    text-align: left;
+    background: #0008FF;
+    color: #fff;
+    margin-top: 16px;
+    border: 3px solid #800;
+    box-shadow: 4px 4px #0004;
+}
+
+.box.notes {
+    background: #ffc;
+    color: #333;
+    min-height: 121px;
+    resize: vertical;
+}
+
+.box.notes.empty:not(:hover) {
+    box-shadow: none;
+}
+
+.box.notes.empty {
+    opacity: .6;
+    transition:  opacity .2s ease;
+}
+
+.box.notes:hover {
+    opacity: 1;
+}
+
+input.aui,
+.box.notes .boxHead input[type=submit] {
+    padding: 0;
+    margin: 0;
+    border: 0;
+    cursor: pointer;
+    background-color: transparent;
+    font: inherit;
+    color: inherit;
+}
+
+.box.notes .boxHead input[type=submit]:first-of-type {
+    margin-left: auto;
+}
+
+.box.notes .boxHead input[type=submit]:not(:last-of-type) {
+    margin-right: 8px;
+}
+
+.box.notes .boxHead input[type=submit] {
+    width: 16px;
+    height: 16px;
+}
+
+.box.notes .boxHead input[type=submit][name=save] {
+    background-image: url(/img/admin/save.png);
+}
+
+.box.notes .boxHead input[type=submit][name=delete] {
+    background-image: url(/img/admin/delete.png);
+}
+
+.box.notes textarea {
+    display: block;
+    background: none;
+    border: none;
+    resize: none;
+    width: 100%;
+    height: 80px;
+    font: inherit;
+    overflow-y:  auto;
+}
+
+.box.admin .boxHead {
+    padding-left: 4px;
+    display: flex;
+    align-items: center;
+    background: #800;
+}
+
+.box.admin .boxHead b {
+    margin-left: 5px;
+}
+
+.box.admin .content {
+    padding: 4px;
+}
+
+.box.admin code {
+    font-family: Ubuntu Mono, monospace;
+    font-size: 14px;
+    padding: 2px 4px;
+    background: #222;
+    border-radius: 4px;
+}
+
+.box.admin a {
+    display: inline-block;
+    text-decoration: none;
+    width: calc(50% - 36px);
+}
+
+.box.admin a .boxButton {
+    width: 100%;
+}
+
+.box.admin .boxButton {
+    margin-top: 6px;
+    color: #6ff;
+    background-repeat: no-repeat;
+    image-rendering: initial;
+    width: calc(50% - 36px);
+}
+
+#admBan {
+    background-image: url(/img/admin/icon_ban.png);
+}
+
+#admEdit {
+    background-image: url(/img/admin/icon_edit.png);
+}
+
+#admViewMail {
+    background-image: url(/img/admin/mail.png);
+}
+
+#admReports {
+    background-image: url(/img/admin/icon_reports.png);
+}
+
+#admSwitchUser {
+    background-image: url(/img/admin/icon_switch.png);
+}
+
+input.aui {
+    color:  #5ff;
+}
+
+.aui.auiEnabled {
+    font-weight: bold;
+}
+
+.box.admin.banned {
+    display: flex;
+    align-items: center;
+    background: #800;
+    background-image: url(/img/admin/icon_ban.png);
+    background-repeat: no-repeat;
+    background-position: calc(100% + 86px) bottom;
+    text-align: center;
+    padding: 24px 0;
+}
+
+.box.admin.banned img {
+    height: 64px;
+    margin-left: 12px;
+}
+
+.box.admin.banned .content {
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: left;
+    margin-left: 12px;
+}
+
+.box.confirm {
+    display: inline-block;
+    margin: 24px;
+}
+
+.box.confirm .content img {
+    margin-right: 6px;
+}
+
+.box.confirm .buttons {
+    display: block;
+    margin-top: 12px;
+    margin-right: 4px;
+    margin-bottom: 4px;
+    text-align: right;
+}
+
+.box.confirm .buttons button,
+.box.confirm .buttons input[type=submit] {
+    min-width: 70px;
+}
+
+.box.ban-confirm textarea {
+    display: block;
+    width: 500px;
+    height: 120px;
+    margin-top: 24px;
+    resize: none;
+    font: inherit;
+}

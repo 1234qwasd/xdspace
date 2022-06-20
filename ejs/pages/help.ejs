@@ -1,0 +1,56 @@
+<%-
+   include('../templates/headers', {
+      title: 'Help',
+      css: '@media only screen and (max-width:768px){#container{padding-top: 40px;}}'
+   });
+%>
+<body>
+    <%- include('../templates/nav') %>
+    <div id="container">
+        <h1>Help</h1>
+        <h4>How do I create an account?</h4>
+        <p>Go here: <a href="signup.php">Sign Up</a></p>
+
+        <h4>How do I edit my fwiend list?</h4>
+        <p>You can favorite, remove or block fwiends here: <a href="all.php?id=<%= viewer ? viewer.id: 1 %>">My Fwiends list</a></p>
+
+        <h4>Can I see all users somewhere?</h4>
+        <p>Yes, here: <a href="list.php">All Fwiends</a></p>
+
+        <h4>Why can't I see my comment after posting to my fwiend's page?</h4>
+        <p>Because your comment needs your fwiend's approval to be published.</p>
+
+        <h4>Why did my name become "User Banned" and I have this stupid avatar?</h4>
+        <p>Obviously because you were permabanned: Oof, the end.</p>
+
+        <h4>How do I customize my profile?</h4>
+        <p>1. Learn some CSS basics here: <a href="https://www.w3schools.com/css/">https://www.w3schools.com/css/</a></p>
+        <p>2. Use the custom CSS formular available here: <a href="/edit.php">Edit your profile</a></p>
+        <p>3. Use pure CSS only:</p>
+        <ul>
+            <li>✅ this works: <i>body{background:deeppink;}</i></li>
+            <li>❌ this does not: <i>&lt;style&gt;body{background:deeppink;}&lt;/style&gt;</i></li>
+        </ul>
+
+
+        <h4>Can I use the Markdown Syntax on MySpace?</h4>
+        <p>Yes my fwiend! You can use the Markdown syntax in your <i>ABOUT</i> and <i>WHO</i> sections,
+            <br>also in <i>COMMENTS</i>, <i>PRIVATE MESSAGES</i> and <i>BLOGS</i>.</p>
+        <p>Learn more here: <a href="https://www.markdownguide.org/basic-syntax/">Basic Syntax</a></p>
+
+        <h4>I'm a developer, is there an api for this?</h4>
+        <p>Yes mister hackerman:</p><br>
+
+        <b><i>Classic API</i></b>
+        <p>You can use: <a href="/api.php?id=1"><%= origin %>/api.php?id=1</a></p>
+        <p>Simply replace the user ID with the one from which you want to obtain information.</p>
+        <p>Without specifying an ID, you'll get a list of all users with the number of friends they have (<a href="/api.php">all users</a>).</p>
+        <p>For obvious reasons, the api is limited to 1 request per second.</p><br>
+
+        <b><i>REST API</i></b>
+        <p>Coming soon! (tm)</p>
+
+        <%- include('../templates/footer') %>
+    </div>
+</body>
+</html>

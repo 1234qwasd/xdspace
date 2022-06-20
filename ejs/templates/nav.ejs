@@ -1,0 +1,51 @@
+<div id="header">
+    <a class="logo" href="/">
+        <b>
+            <span style="padding-top: 2px; position: absolute;"><%= new URL(origin).hostname %></span>
+        </b>
+    </a>
+    <span id="hUp" style="float:right;margin-right: 5px;margin-top: 3px;font-size: small;">
+        <% if(connected) { %>
+            <% if(viewer.notifications.new_friends) { %>
+            <a href="/all.php?id=<%= viewer.id %>" class="blinkGreen">New Fwiends!</a>
+            <% } %>
+            <% if(viewer.profile.pending.friends.length > 0) { %>
+            <a href="/requests.php" class="blinkYellow">New Fwiend requests!</a>
+            <% } %>
+            <% if(viewer.profile.pending.comments.length > 0) { %>
+            <a href="/review.php" class="blinkViolet">New Comments!</a>
+            <% } %>
+
+            <% if(viewer.admin) { %>
+                <form action="/manage/setaui" method="POST" style="display: inline-block">
+                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                    <input type="hidden" name="state" value="<%= adminUI ? 0: 1 %>">
+                    <input type="hidden" name="redirect" value="<%= req.originalUrl %>">
+                    <input type="submit" class="aui <%= adminUI ? 'auiEnabled': 'auiDisabled' %>" value="AdminUI">
+                </form>
+            <% } %>
+
+            <a href="mailbox.php?id=<%= viewer.id %>">MailBox</a>
+            <a href="logout.php">Logout</a>
+        <% } else { %>
+            <a href="signup.php">SignUp</a>
+            <a href="login.php">Login</a>
+        <% } %>
+    </span>
+</div>
+
+<div id="hSub">
+    <a href="/?id=<%= connected ? viewer.id: 1 %>">Home</a> |
+    <% if(connected) { %>
+    <a href="/all.php?id=<%= viewer.id %>"><span class="sep">My </span>Fwiends</a> |
+    <% } %>
+    <a href="/list.php">All <span class="sep">Fwiends</span></a> |
+    <a href="/random.php">Rand<span class="sep">om</span></a> |
+    <a href="/online.php">Online</a> |
+    <a href="/music.php">Music</a>
+    <% if(connected) { %>
+    | <a href="/news.php">News</a>
+    <% } %>
+    <span class="sep">| <a href="/blog.php">Blog</a> </span> |
+    <a href="/search.php">Search</a>
+</div>

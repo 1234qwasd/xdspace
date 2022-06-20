@@ -1,0 +1,52 @@
+<%-
+   include('../templates/headers', {
+      title: 'Switch user',
+      jquery: true
+   });
+%>
+<body>
+    <div id="container">
+      <%- include ('../templates/nav') -%>
+
+      <% if(!canSwitch) { %>
+      <div class="box admin confirm">
+         <div class="boxHead">
+            <img src="/img/admin/warning.png">
+            <b>Error</b>
+         </div>
+
+         <div class="content">
+            <img src="/img/admin/warning_large.png" style="float: left">
+            <span>Switching to this user is not allowed.</span>
+
+            <div class="buttons">
+               <button onclick="history.back()">Go back</button>
+            </div>
+         </div>
+      </div>
+      <% } else { %>
+
+      <form class="box admin confirm" action="/manage/switch" method="POST">
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+            <input type="hidden" name="user" value="<%= user.id %>">
+
+            <div class="boxHead">
+               <img src="/img/admin/warning.png">
+               <b>Confirm session switch</b>
+            </div>
+
+            <div class="content">
+               <img src="/img/admin/warning_large.png" style="float: left">
+               <span>You are about to switch your session to login as <code><%= user.name %></code>.</span><br>
+               <span>Press Switch to confirm, or Cancel to go back.</span>
+
+               <div class="buttons">
+                  <button onclick="history.back()">Cancel</button>
+                  <input type="submit" value="Switch">
+               </div>
+            </div>
+      </form>
+      <% } %>
+   </div>
+</body>
+</html>

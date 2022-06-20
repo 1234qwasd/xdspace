@@ -1,0 +1,38 @@
+<%-
+    include('../templates/headers', {
+        title: 'Fwiend list'
+    });
+-%>
+<body style="padding: 20px; padding-top: 70px">
+    <div id="container">
+        <%- include ('../templates/nav') -%>
+        <div class="allfwieds">
+            <% if(typeof listAll != 'undefined' && listAll) { %>
+            <% throw new Error('This page is not complete yet.'); %>
+            <h2>All Fwiends (<%= userCount %>)</h2>
+            <p style="margin-bottom: 20px">
+                <i>This page displays all users.</i>
+            </p>
+            <% } else { %>
+            <a href="/?id=<%= user.id %>">&lt; Go Back</a>
+            <h2>All <%= user.name %>'s Fwiends</h2>
+            <% } %>
+
+
+
+            <% for(const friend of user.friends) { %>
+            <div class="allfwiedsItem">
+                <a href="/?id=<%= friend.id %>">
+                    <b><%= friend.name %></b>
+                    <div>
+                        <img style="width:calc( 100% - 20px );" src="/u/<%= friend.id %>/avatar">
+                    </div>
+                </a>
+            </div>
+            <% } %>
+        </div>
+    </div>
+
+    <%- include('../templates/footer') %>
+</body>
+</html>

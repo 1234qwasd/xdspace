@@ -1,0 +1,28 @@
+<%-
+    include('../templates/headers', {
+        title: 'Upload profile picture'
+    });
+-%>
+<body>
+    <%- include ('../templates/nav') -%>
+    <div id="uploadInfo" style="display: none;margin-top: 20px;">
+        <i>Uploading your file, please Wait...</i>
+    </div>
+    <div id="container" style="margin-top: 32px;">
+
+        <a href="index.php?id=<%= viewer.id %>">< Go Back</a>
+        <h3>Edit profile picture</h3>
+
+        <div>This is your current profile picture:</div>
+        <img src="u/<%= viewer.id %>/avatar" style="max-width:500px;">
+        <div>Upload a new picture? (NSFW is not permited)</div>
+        <br>
+        <form enctype="multipart/form-data" action="upload.php?id=<%= viewer.id %>&_csrf=<%= csrfToken %>" method="post" style="text-align: left;">
+          <!-- Le nom de l'élément input détermine le nom dans le tableau $_FILES -->
+          <input name="userfile" type="file">
+          <input onclick="document.getElementById('container').style.display = 'none'; document.getElementById('uploadInfo').style.display = 'block';" type="submit" value="Send">
+        </form>
+
+    </div>
+</body>
+</html>

@@ -1,0 +1,246 @@
+<%-
+    include('../templates/headers', {
+        title: user ? `${possessive(user.name)} Profile`: 'Profile not found',
+        jquery: true,
+        preload: [
+            (user && !adminUI && !(req.viewer && req.viewer.hasBlocked(user))) ? `/u/${user.id}/css`: null
+        ]
+    });
+-%>
+<body>
+    <div id="container">
+    <%- include ('../templates/nav') -%>
+    <% if(user) { %>
+
+        <% // TOP LEFT // %>
+
+        <div class="topLeft">
+            <div><h2 class="uName" id="name"><%= user.name %></h2></div>
+
+            <% // INFO BOX // %>
+            <table class="short">
+                <tr>
+                    <td>
+                        <img src="u/<%= user.id %>/avatar?v=<%= user.avatar.last_update.getTime() %>" class="avatar" id="avatar">
+                        <% if(viewer && viewer.id === user.id) { %>
+                        <div style="text-align: center;">
+                            <button onClick="window.location='photo.php?id=<%= user.id %>'">Edit</button>
+                        </div>
+                        <% } %>
+                    </td>
+                    <td class="shortRight">
+                        <div>"<span id="credo"><%= profile.about.motto %></span>"</div><br>
+                        <div id="gender"><%= profile.about.gender %></div>
+                        <div><span id="age"><%= profile.about.age %></span> years old</div>
+                        <div id="country"><%= profile.about.country %></div>
+                        <div id="online" style="display:none;margin-top:10px;"><img src="/img/online.gif"></div>
+                        <div style="font-size:small;margin-top:10px;">Last Login:<br><span id="lastLogin"><%= user.last_login.getTime() %></span></div>
+                    </td>
+                </tr>
+            </table>
+
+            <% // CONTACT BOX // %>
+            <div class="boxInfo box">
+                <div class="boxHead"><b>Contacting <span class="uName"><%= user.name %></span></b></div>
+
+                <a href="send.php?id=<%= user.id %>"><div class="boxButton" id="sMsg">Send Message</div></a>
+                <a href="report.php?id=<%= user.id %>"><div class="boxButton" id="report">Report</div></a>
+                <a href="invitation.php?id=<%= user.id %>"><div class="boxButton <%= isFriend ? 'muRemoveFriend': 'muAddFriend' %>" id="add"><%= isFriend ? 'Remove fwiend': 'Add to fwiends' %></div></a>
+                <a href="blokc.php?id=<%= user.id %>"><div class="boxButton" id="block"><%= (viewer && viewer.hasBlocked(user)) ? 'Unblock': 'Block' %></div></a>
+            </div>
+
+            <% // URL BOX // %>
+            <div class="url box">
+                <div><b>MySpace URL:</b></div>
+
+                <div><a style="color:#000;text-decoration:none;" href="<%= origin %>/?id=<%= user.id %>">
+                        <%= origin %>/?id=<%= user.id %>
+                </a></div>
+            </div>
+
+            <% // UPLOAD MP3 // %>
+            <% if(viewer && viewer.id === user.id) { %>
+            <div style="text-align: center">
+                <button onclick="window.location.href='/mp3.php'">Edit Mp3</button>
+            </div>
+            <% } %>
+
+            <% // SONG PLAYER // %>
+            <% if(profile.song.enabled) { %>
+            <%-
+                include('../templates/player', {
+                    songName: profile.song.name,
+                    songUserID: user.id,
+                    songTimestamp: profile.song.last_update.getTime()
+                });
+            %>
+            <% } %>
+
+            <% // ADMIN BOX // %>
+            <% if(adminUI) { %>
+            <% if(user.banned && user.admin_data.banned_by) { %>
+            <div class="box admin banned">
+                <img src="/u/<%= user.admin_data.banned_by.id %>/avatar" style="float: left">
+                <span class="content">
+                    <span>Banned by <b><%= user.admin_data.banned_by.name %></b> on <span class="date"><%= user.admin_data.banned_on.getTime() %></span>.</span>
+                    <span>Reason: "<%= user.admin_data.ban_reason %>"</span>
+                </span>
+            </div>
+            <% } %>
+
+            <div class="box admin">
+                <div class="boxHead">
+                    <img src="/img/admin/admin.png">
+                    <b>Administrator</b>
+                </div>
+
+                <div class="content">
+                    <p><b>Created on:</b> <span class="date"><%= user.created_on.getTime() %></span></p>
+                    <p><b>Last IP:</b> <code><%= user.admin_data.last_ip || '<unknown>' %></code></p>
+
+                    <a href="/manage/ban?user=<%= user.id %>">
+                        <div class="boxButton" id="admBan">
+                            <% if(!user.banned) { %> Ban
+                            <% } else { %> Unban <% } %>
+                        </div>
+                    </a>
+                    <a href="/edit.php?id=<%= user.id %>">
+                        <div class="boxButton" id="admEdit">Edit profile</div>
+                    </a>
+                    <a href="/mailbox.php?id=<%= user.id %>">
+                        <div class="boxButton" id="admViewMail">Mailbox</div>
+                    </a>
+                    <a href="/manage/switch?user=<%= user.id %>">
+                        <div class="boxButton" id="admSwitchUser">Switch</div>
+                    </a>
+                </div>
+            </div>
+
+            <% if(user.reports.length > 0) { %>
+            <form class="box admin reports">
+                <div class="boxHead">
+                    <img src="/img/admin/reports.png">
+                    <b>Reports</b>
+                </div>
+                <div class="content">
+                    bla
+                </div>
+            </form>
+            <% } %>
+
+            <form class="box admin notes <%= !user.admin_data.note ? 'empty': '' %>" action="/manage/note" method="POST">
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                <input type="hidden" name="redirect" value="<%= req.originalUrl %>">
+                <input type="hidden" name="user" value="<%= user.id %>">
+                <div class="boxHead">
+                    <img src="/img/admin/notes.png">
+                    <b>Notes</b>
+                    <% if(user.admin_data.note) { %>
+                    <input type="submit" name="delete" value="">
+                    <% } %>
+                    <input type="submit" name="save" value="">
+                </div>
+
+                <textarea class="content" placeholder="Enter notes here.." name="note" autocomplete="false"><%= user.admin_data.note %></textarea>
+            </form>
+            <% } %>
+    </div>
+
+    <% // TOP RIGHT // %>
+
+    <% if(req.viewer && req.viewer.hasBlocked(user)) { %>
+    <div class="extended box">
+        <h3>You have blocked this user.</h3>
+    </div>
+    <% } else { %>
+
+    <div class="topRight">
+        <div class="extended box">
+                <% if(viewer && viewer.id === user.id) { %>
+                <a href="/edit.php?id=<%= user.id %>">
+                    <h3>Edit your profile</h3>
+                </a>
+                <% } else { %>
+                <h3><span class="uName"><%= user.name %></span> is in your extended network</h3>
+                <% } %>
+        </div>
+
+        <div class="box blurbs">
+            <% // BLOGS // %>
+
+            <% if(profile.blogs.length > 0) { %>
+                <div class="blogs">
+                    <div><b><%= possessive(user.name) %> Latest Blog Entry</b></div>
+
+                    <% for(let i = 0; i < profile.blogs.length; i++) { %>
+                    <%  let blog = profile.blogs[i]; %>
+                    <div><%= blog.title %> [<a href="blog.php?id=<%= user.id %>&b=<%= i %>">view more</a>]</div>
+                    <% } %>
+                </div>
+            <% } %>
+
+            <% // BLURBS // %>
+
+            <div class="rightHead"><b><span class="uName"><%= user.name %></span><%= possessive(user.name, false) %> blurbs</b></div>
+
+            <h4>About me:</h4>
+            <div id="about">
+                <%- md.render(profile.about.bio) %>
+            </div>
+
+            <h4>Who I'd like to meet:</h4>
+            <div id="who">
+                <%- md.render(profile.about.meet) %>
+            </div>
+        </div>
+
+        <% // FWIENDS // %>
+        <div class="box fwiends">
+            <div class="rightHead"><b><span class="uName"><%= user.name %></span><%= possessive(user.name, false) %> Fwiends Space</b></div>
+            <div class="fwiendCounter">
+                <b>
+                    <span class="uName"><%= user.name %></span>
+                    has
+                    <span class="fwiendCount"><%= friendCount %></span> fwiend<%= friendCount !== 1 ? 's': '' %>.
+                </b>
+            </div>
+
+            <div id="top">
+                <% for(const friend of userTop) { %>
+                <a href="/?id=<%= friend.id %>">
+                    <div class="fwiendFace">
+                        <b><%= friend.name %></b>
+                        <img src="u/<%= friend.id %>/avatar">
+                    </div>
+                </a>
+                <% } %>
+            </div>
+
+            <div id="viewFriends">
+                <b>View <a href="all.php?id=<%= user.id %>">All</a> <span class="uName"><%= user.name %></span><%= possessive(user.name, false) %> Fwiends</b></div>
+        </div>
+
+        <% // COMMENTS // %>
+
+        <div class="box comments">
+            <%-
+                include('../templates/comments', {
+                    comments: profile.comments,
+                    allowPost: true,
+                    type: 'profile'
+                })
+            %>
+        </div>
+    </div>
+    <% } %>
+
+    <% } else { %>
+        <p style="margin-top: 30px; padding: 16px 10px">Profile not found.</p>
+    <% } %>
+    <div id="imgPreview"><img src=""></div>
+    <%- include('../templates/footer') %>
+    <script>const ONLINE_TIME = <%= config.PROFILE_ONLINE_TIME %></script>
+    <script type="text/javascript" src="index.js"></script>
+    </div>
+</body>
+</html>
